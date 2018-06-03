@@ -1,0 +1,45 @@
+<html>
+
+<head>
+    <script src="./index.js"></script>
+</head>
+
+<body>
+    <div style="display: flex; flex-direction: column">
+        <div>
+            <input type="file" id="img_input" onchange="selectImg(this)" />
+            <button id="transform" onclick="transform()">transform</button>
+        </div>
+        <div style="margin: 50">
+            <img id="result" src="" />
+        </div>
+    </div>
+
+    <script>
+        var input = document.getElementById('img_input');
+        var result = document.getElementById('result');
+        var inputFile;
+        function selectImg(file) {
+            var reader = new FileReader();
+            reader.onload = function (evt) {
+                result.src = evt.target.result;
+                inputFile = evt.target.result;
+            }
+            reader.readAsDataURL(file.files[0]);
+        }
+
+        function transform() {
+            const result = sampleImgData(getImgData(inputFile), 1, 1);
+            var data = '';
+            for (let i = 0; i < result.length; i++) {
+                for (let j = 0; j < result[i].length; j++) {
+                    data += result[i][j] + '' ;
+                }
+                data += '\n'
+            }
+            console.log(data);
+        }
+    </script>
+</body>
+
+</html>
