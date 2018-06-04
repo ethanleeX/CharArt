@@ -3,20 +3,19 @@
  *
  * @author ethan lee
  */
-const img2character = (file) => {
-
-};
-
-const getImgData = (file) => {
+const getImgData = (file, width, height) => {
     const img = new Image();
     img.src = file;
     const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
     // canvas's default size is 300 * 150 so we should resize it
-    canvas.width = img.width;
-    canvas.height = img.height;
-    context.drawImage(img, 0, 0);
-    const imgData = context.getImageData(0, 0, img.width, img.height).data;
+    const imgWidth = width || img.width;
+    const imgHeight = height || imgWidth / img.width * img.height;
+    canvas.width = imgWidth;
+    canvas.height = imgHeight;
+    const context = canvas.getContext('2d');
+
+    context.drawImage(img, 0, 0, imgWidth, imgHeight);
+    const imgData = context.getImageData(0, 0, imgWidth, imgHeight).data;
     const result = [];
     let rowData = [];
     for (let i = 0; i < imgData.length; i += 4) {
@@ -24,22 +23,10 @@ const getImgData = (file) => {
         const gray = _gray(rgba);
         const threshold = _threshold(gray);
         rowData.push(threshold);
-        if (rowData.length === img.width) {
+        if (rowData.length === imgWidth) {
             result.push(rowData);
             rowData = [];
         }
-    }
-    return result;
-};
-
-const sampleImgData = (imgData, rateX = 1, rateY = 1) => {
-    const result = [];
-    for (let i = 0; i < imgData.length; i += rateY) {
-        const rowResult = [];
-        for (let j = 0; j < imgData[i].length; j += rateY) {
-            rowResult.push(imgData[i][j]);
-        }
-        result.push(rowResult);
     }
     return result;
 };

@@ -10,17 +10,20 @@
             <input type="file" id="img_input" onchange="selectImg(this)" />
             <button id="transform" onclick="transform()">transform</button>
         </div>
-        <div style="margin: 50">
-            <img id="result" src="" />
+        <div style="margin: 50;display: flex;">
+            <div>
+                <img id="result" src=""/>
+            </div>
+            <pre id="imgCharacter" style="font-size: 6px;"></pre>
         </div>
     </div>
 
     <script>
-        var input = document.getElementById('img_input');
-        var result = document.getElementById('result');
-        var inputFile;
+        let input = document.getElementById('img_input');
+        let result = document.getElementById('result');
+        let inputFile;
         function selectImg(file) {
-            var reader = new FileReader();
+            let reader = new FileReader();
             reader.onload = function (evt) {
                 result.src = evt.target.result;
                 inputFile = evt.target.result;
@@ -29,15 +32,17 @@
         }
 
         function transform() {
-            const result = sampleImgData(getImgData(inputFile), 1, 1);
-            var data = '';
+            const result = getImgData(inputFile, 150);
+            let data = '';
             for (let i = 0; i < result.length; i++) {
                 for (let j = 0; j < result[i].length; j++) {
-                    data += result[i][j] + '' ;
+                    data += result[i][j] + '';
                 }
                 data += '\n'
             }
             console.log(data);
+            const p = document.getElementById('imgCharacter');
+            p.innerText = data;
         }
     </script>
 </body>
